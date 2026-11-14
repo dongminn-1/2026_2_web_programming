@@ -1,47 +1,139 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<style>
-    h1 { text-align: center;}
-    .disp { width:205px; height: 40px; margin-top: 3px;}
-    input[type=button] {width: 50px; height: 50px; text-align: center; vertical-align: middle; margin-top: 5px;}
-    #calc {width: 220px; margin-left: auto; margin-right: auto;}
-</style>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function(){
-        $('.num').click(function(){
-            let n = $(this).val();
-            $('#disp2').val(n);
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계산기</title>
+
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .disp {
+            width: 205px;
+            height: 40px;
+            margin-top: 3px;
+            font-family: "Arial", sans-serif;
+            font-size: 22pt;
+            text-align: right;
+        }
+
+        input[type=button] {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            margin-top: 5px;
+            font-size: 15pt;
+        }
+
+        #calc {
+            width: 220px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            // 숫자 버튼을 클릭했을 때
+            $('.num').click(function(){
+                let cur = $('#disp2').val();
+                let n = $(this).val();
+
+                if(cur == "Error") {
+                    cur = "";
+                }
+
+                $('#disp2').val(cur+n);
+            });
+
+            // 연산자 버튼을 클릭했을 때
+            $('.op').click(function(){
+                let cur = $('#disp2').val();
+                let opt = $(this).val();
+
+                if(opt != "=") {
+                    if(cur == "Error" || cur == "") {
+                        return;
+                    }
+
+                    // 연산자가 연속으로 입력되는 것을 방지
+                    if(/[+\-*/]$/.test(cur)) {
+                        cur = cur.slice(0, -1);
+                    }
+
+                    $('#disp2').val(cur+opt);
+                }
+                else {
+                    if(cur == "" || cur == "Error") {
+                        return;
+                    }
+
+                    $('#disp1').val(cur);
+
+                    try {
+                        let result = eval(cur);
+
+                        if(!isFinite(result)) {
+                            $('#disp2').val("Error");
+                        }
+                        else {
+                            $('#disp2').val(result);
+                        }
+                    }
+                    catch(e) {
+                        $('#disp2').val("Error");
+                    }
+                }
+            });
+
+            // AC 버튼을 클릭했을 때
+            $('.func').click(function(){
+                $('#disp1').val("");
+                $('#disp2').val("");
+            });
+
         });
-    });
-</script>
+    </script>
+</head>
+
 <body>
     <h1>계산기</h1>
+
     <div id="calc">
         <div>
             <input type="text" class="disp" id="disp1" readonly>
             <input type="text" class="disp" id="disp2" readonly>
         </div>
-        <input type="button" class="num" value=="7">
-        <input type="button" class="num" value=="8">
-        <input type="button" class="num" value=="9">
-        <input type="button" class="op" value=="+"><br>
-        <input type="button" class="num" value=="4">
-        <input type="button" class="num" value=="5">
-        <input type="button" class="num" value=="6">
-        <input type="button" class="op" value=="-"><br>
-        <input type="button" class="num" value=="1">
-        <input type="button" class="num" value=="2">
-        <input type="button" class="num" value=="3">
-        <input type="button" class="op" value=="*"><br>
-        <input type="button" class="func" value=="AC">
-        <input type="button" class="num" value=="0">
-        
+
+        <input type="button" class="num" value="7">
+        <input type="button" class="num" value="8">
+        <input type="button" class="num" value="9">
+        <input type="button" class="op" value="+">
+        <br>
+
+        <input type="button" class="num" value="4">
+        <input type="button" class="num" value="5">
+        <input type="button" class="num" value="6">
+        <input type="button" class="op" value="-">
+        <br>
+
+        <input type="button" class="num" value="1">
+        <input type="button" class="num" value="2">
+        <input type="button" class="num" value="3">
+        <input type="button" class="op" value="*">
+        <br>
+
+        <input type="button" class="func" value="AC">
+        <input type="button" class="num" value="0">
+        <input type="button" class="op" value="=">
+        <input type="button" class="op" value="/">
     </div>
 </body>
 </html>
