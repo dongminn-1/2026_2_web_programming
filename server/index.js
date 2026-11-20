@@ -18,7 +18,7 @@ const server = http.createServer((req,res)=>{
     //readStream.pipe(res);
     res.setHeader("Content-Type", "text/plain");
     const {method, url} = req;
-    if( method === "GET" && url === "/home") {
+    if( method === "POST" && url === "/home") {
         res.statusCode = 200;
         res.end("HOME");
     } else if(method === "GET" && url === "/about") {
